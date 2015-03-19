@@ -1,7 +1,7 @@
 class DockingStation
   DEFAULT_CAPACITY = 20
 
-  attr_reader :available_room
+  attr_reader :available_room, :bikes
 
   def initialize(options = {})
     @bikes = []
@@ -21,9 +21,15 @@ class DockingStation
     @bikes << bike
   end
 
+  def release_broken_bikes
+    bikes_to_be_removed = bikes.select(&:broken?)
+    bikes.reject!(&:broken?)
+    bikes_to_be_removed
+  end
+
   private
 
-  attr_reader :bikes, :room
+  attr_reader :room
 
   def bike_count
     @bikes.length

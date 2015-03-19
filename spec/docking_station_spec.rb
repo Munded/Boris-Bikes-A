@@ -1,7 +1,7 @@
 require 'docking_station'
 
 describe DockingStation do
-  it 'releases bikes that are not broken' do
+  it 'can release bikes that are not broken' do
     working_bike = double :bike, broken?: false
     subject.dock working_bike
     bike = subject.release_bike
@@ -31,5 +31,13 @@ describe DockingStation do
     17.times { subject.dock bike }
     subject.release_bike
     expect(subject.available_room).to eq 4
+  end
+  it 'can release only broken bikes' do
+    broken_bike = double :broken_bike, broken?: true
+    working_bike = double :working_bike, broken?: false
+    subject.dock(broken_bike)
+    subject.dock(working_bike)
+    expect(subject.release_broken_bikes).to eq([broken_bike])
+    expect(subject.bikes).to eq([working_bike])
   end
 end
